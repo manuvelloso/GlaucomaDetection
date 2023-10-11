@@ -1,4 +1,4 @@
 # GlaucomaDetection
 Trabajo Final de PDI. Detección Automática de Glaucomas en Imágenes de Fondo de Ojos.
 
-Base de datos de imágenes de fondo de ojos: https://www.kaggle.com/datasets/gunavenkatdoddi/eye-diseases-classification/
+[Base de datos](https://cecas.clemson.edu/~ahoover/stare/)https://cecas.clemson.edu/~ahoover/stare/ de imágenes de fondo de ojos
