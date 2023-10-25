@@ -1,4 +1,2 @@
 # GlaucomaDetection
-Trabajo Final de PDI. Detección Automática de Glaucomas en Imágenes de Fondo de Ojos.
-
-[Base de datos](https://cecas.clemson.edu/~ahoover/stare/) de imágenes de fondo de ojos
+Trabajo Final de PDI. Detección automática de Glaucomas en imágenes de Fondo de Ojos.
