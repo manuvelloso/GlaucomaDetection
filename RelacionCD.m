@@ -9,7 +9,7 @@ G = im(:,:,2);
 G_i = imadjust(G); 
 R_i = imadjust(R);
 
-% Elemento estructurante tamaño 15
+% Elemento estructurante tamaño 10
 EE = strel('disk',10);  
 
 % Operaciones morfologicas -------
@@ -38,28 +38,29 @@ G_bw = imerode(G_bw,EE);
 R_bw = imdilate(R_bw,EE);
 
 %Elemento estructural tamaño 10
-EE = strel('disk',10); 
+EE = strel('disk', 10); 
 G_bw = imdilate(G_bw,EE);
 
 A_disco = sum(R_bw(:));
 A_copa = sum(G_bw(:));
-CD = imdivide(A_copa,A_disco);
-if(CD<0.1)
-    if(sum(G_bw)==0) % se nos hizo cero el cup
-        CD=AjusteCup(G_i,G_bw,R_bw);
-    else %el disk es muy grande
-        %AjusteDisk(R_i,R_bw);
-        cont=cont+1;
-    end
+CD = imdivide(A_copa, A_disco);
+
+if(sum(G_bw) == 0) % se nos hizo cero el cup
+    CD = AjusteCup(G_i,G_bw,R_bw);
 end
+% TODOOOOOO!!!!!!!
+% else %el disk es muy grande
+%         %AjusteDisk(R_i,R_bw);
+% end
+
 
 % Componente roja
-figure(1)
-subplot(231),imshow(im),title(['Imagen normal',num2str(CD)])
-subplot(232),imshow(R),title('Componente roja')
-subplot(233),imshow(R_bw),title('Area del disco')
-subplot(234),imshow(G),title('Componente verde')
-subplot(235),imshow(G_bw),title('Cup Area')
-pause(0.2)
+% figure(1)
+% subplot(231),imshow(im),title(['Imagen normal',num2str(CD)])
+% subplot(232),imshow(R),title('Componente roja')
+% subplot(233),imshow(R_bw),title('Area del disco')
+% subplot(234),imshow(G),title('Componente verde')
+% subplot(235),imshow(G_bw),title('Cup Area')
+% pause(0.2)
 
 end
