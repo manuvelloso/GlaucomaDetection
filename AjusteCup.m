@@ -1,4 +1,4 @@
-function CD=AjusteCup(G_i,G_bw,R_bw) %si entro es porque el cup quedo negro
+function [CD, G_bw]=AjusteCup(G_i,G_bw,R_bw) %si entro es porque el cup quedo negro
 
 EE = strel('disk',10);  
 % Cerradura
@@ -16,6 +16,7 @@ CD = imdivide(A_copa,A_disco);
 
 figure(2)
 imshow(G_bw); % me quedo con lo que no seria cero
+title('Ajuste cup')
 pause(0.4)
 end
 
