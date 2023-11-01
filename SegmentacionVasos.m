@@ -1,6 +1,6 @@
 %% Segementacion de vasos
 % Inputs: imagen (im) 
-% Outputs: mascara binarizada con los vasos sangu韓eos del disco
+% Outputs: mascara binarizada con los vasos sangu铆neos del disco
 
 function Vasos = SegmentacionVasos(im)
 % Preprocesamiento de Imagen
@@ -16,22 +16,22 @@ aux = V2;                   %Variable auxiliar
 V2(:,:,2)=0;                %Canal Green a cero
 V2(:,:,3)=0;                %Canal Blue a cero
 
-Result = aux - V2;          %Eliminaci髇 de componente roja
+Result = aux - V2;          %Eliminaci贸n de componente roja
 Result(:,:,3)=0;            %Solo componente verde (los vasos)
 
-% Binarizaci髇
+% Binarizaci贸n
 th = multithresh(Result,1);
 bw = im2bw(Result,th);
 
-% Operaciones Morfol骻icas
+% Operaciones Morfol贸gicas
 bw1 = bwmorph(bw,'clean');
-bw2 = bwareaopen(bw1,40);
+bw2 = bwareaopen(bw1,16);
 bw3 = bwmorph(bw2,'dilate');
 bw4 = bwmorph(bw3,'erode');
 
-% Obtenci髇 de la m醩cara del disco 
+% Obtenci贸n de la m谩scara del disco 
 mask = MascaraDisco(im);
 
-% Vasos sangu韓eos del disco
+% Vasos sangu铆neos del disco
 Vasos = mask.*bw4;
 end
