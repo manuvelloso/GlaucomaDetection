@@ -1,5 +1,3 @@
-% Código sacado de: https://la.mathworks.com/matlabcentral/fileexchange/63171-jerman-enhancement-filter?s_tid=srchtitle_support_results_8_Frangi&requestedDomain=
-
 function vesselness = vesselness2D(I, sigmas, spacing, tau, brightondark)
 % calculates the vesselness probability map (local tubularity) of a 2D
 % input image
