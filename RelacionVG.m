@@ -3,16 +3,14 @@
 % Outputs: área de los vasos del disco/área del globo
 
 function A = RelacionVG(im)
-% Calcular centro, radio y área del globo ocular
-[centro, radio, AreaGlobo] = GloboOcular(im);
 
 % Generación de la máscara que contenga unicamente a los vasos del disco
-mask = SegmentacionVasos(im,centro,radio);
+mask = SegmentacionVasos(im);
 
-%  figure(1)
-%  imshowpair(im,mask,'montage');
-%  title(['img', num2str(i)]);
-%  pause(0.5);
+  figure(1)
+  imshowpair(im,mask,'montage');
+  %title(['img', num2str(i)]);
+  pause(0.5);
 
 % Calcular área de los vasos encontrados
 AreaVasos = sum(mask(:));
