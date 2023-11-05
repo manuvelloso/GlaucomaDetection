@@ -1,14 +1,14 @@
 %% Segementacion de vasos
 % Inputs: imagen (im) 
-% Outputs: mascara binarizada del disco
+% Outputs: mascara binarizada del disco, centro y radio
 
-function D = MascaraDisco(im)
+function [D, center, radio] = MascaraDisco(im)
 Ig = rgb2gray(im);              %Imagen en escala de grises
 
 % Preprocesamiento de Imagen
 Ic = single(im);
 thr = prctile(Ic(Ic(:)>0),1) * 0.9;
-Ic(Ic<=thr) = thr;
+Ic(Ic <= thr) = thr;
 Ic = Ic - min(Ic(:));
 Ic = Ic ./ max(Ic(:));
 
@@ -21,14 +21,15 @@ R(:,:,2)=0;                     %Canal Green a cero
 R(:,:,3)=0;                     %Canal Blue a cero
 
 R = rgb2gray(R);                %Imagen Roja a escala de grises
-% imshow(R);
-[center, radio] = imfindcircles(R,[15 70],'ObjectPolarity','dark','Sensitivity',0.9);
-% viscircles(center, radii,'EdgeColor','b');
-% pause(0.5);
 
-if center ~= 0
+[center, radio] = imfindcircles(R,[15 70],'ObjectPolarity','dark','Sensitivity',0.9);
+
+if ~isempty(center) && ~isempty(radio)
+    radio = radio(1);
     D = MascaraCircular(size(Ig),center,radio);
 else
-    D = OtraMascaraDisco(im);
+    [D, center, radio] = OtraMascaraDisco(im);
 end
+
+
 end
