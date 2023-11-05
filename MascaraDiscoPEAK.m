@@ -1,6 +1,6 @@
 % sin usar la restriccion de center podriamos quedarnos con todo el area que no es atravezada x los vasos
 % dist de M cambia si nos quedamos con la sup
-function ComponenteAzul(im) 
+function MascaraDiscoPEAK(im) 
 B=im(:,:,3);
 [bw,D,center]=NormalizarBlue(im);
 
