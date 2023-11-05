@@ -1,44 +1,47 @@
-function MascaraDiscoPEAK(I)
-Ig = rgb2gray(I);
-% Preprocesamiento de Imagen todo esto es igual a segmentacion vasos pq
-% necesitaba centro y radio
-Ic = single(I);
-thr = prctile(Ic(Ic(:)>0),1) * 0.9;
-Ic(Ic<=thr) = thr;
-Ic = Ic - min(Ic(:));
-Ic = Ic ./ max(Ic(:));
+% sin usar la restriccion de center podriamos quedarnos con todo el area que no es atravezada x los vasos
+% dist de M cambia si nos quedamos con la sup
+function ComponenteAzul(im) 
+B=im(:,:,3);
+[bw,D,center]=NormalizarBlue(im);
 
-V2 = vesselness2D(Ic, 0.5:0.5:2.5, [1;1], 0.3, false);
-aux = V2;
-V2(:,:,1)=0;
+% agarro vasos para restar al disco
+Vasos = SegmentacionVasos(im);
+%Vasos = MascaraDiscoPEAK(im); para mi va mejor pero los filtros
+%morfologicos los ajuste a seg vasos
 
-R = aux - V2;  %Borro componente G y B
-R(:,:,2)=0;
-R(:,:,3)=0;
-R = rgb2gray(R);
-[center, radii] = imfindcircles(I,[15 70],'ObjectPolarity','dark','Sensitivity',0.9);
-
-if isempty(center)
-    D = OtraMascaraDisco(I);
-    stats=regionprops(D,'centroid');
-    center=stats.Centroid;
-end
-% tengo centro y radio del disco
-mask = SegmentacionVasos(I);                    %obtengo los vasos en el disco
-M = zeros(size(mask));                          %armo matriz de ceros
-M(round(center(1,2)),round(center(1,1))) = 1;   % 1 en centro
+%voy a ignorar lo que este muy lejos del centro
+M = zeros(size(Vasos));                         %armo matriz de ceros
+M(round(center(1,2)),round(center(1,1))) = 1;   % 1 en centro del DISCO
 A = double(bwdist(M));                          % para calcular matriz de distancia
-M(A<15)=1;
-M(A>=15)=0;
-mask=mask&M;                                % si el vaso sale del radio cerca al centro va a cero
-
-ee=strel('square',1);
-mask=imerode(mask,ee);  %erosion
+M(A<=10)=1;
+M(A>10)=0;
+Vasos=Vasos&M;                                  %me quedo con los vasos a distancia <10 
+eeS=strel('square',1);
+Vasos=imerode(Vasos,eeS);  %erosion
 ee=strel('square',2);
-mask=imclose(mask,ee);  %cierre= dilat + erosion
+Vasos=imclose(Vasos,ee);
+Vasos=imdilate(Vasos,eeS);
+
+M(A<13)=1;                                      %me quedo con comp verde <13
+bw=bw&M;
+eeD=strel('disk',1);
+bw=imdilate(bw,eeD);                            %dilato lo verde D=1
+
+PacMan=bw-Vasos;
+PacMan=imerode(PacMan,eeD);                     %erosion + apertura D=1
+PacMan=imopen(PacMan,eeD);
+
+PacMan=PacManFunc(PacMan); % esto lo hice para quedarme con el pacman
 
 figure(1)
-imshowpair(I,mask,'blend');
-pause(0.1)
-
+subplot(131)
+imshowpair(B,bw)
+title('componente azul binarizada')
+subplot(132)
+imshowpair(B,Vasos)
+title('vasos desde SegmentacionVasos')
+subplot(133)
+imshowpair(im,PacMan)
+title('PacMan')
+pause(0.02)
 end
