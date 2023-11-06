@@ -1,21 +1,21 @@
-function R_DH = RelacionDH(im)
+%% RelacionDH
+% Input: imagen (im)
+% Output: distancia entre el centro del disco hasta el promedio de las 
+% columnas de los vasos (DH)
+function DH = RelacionDH(im)
 
-[bw, center, Vasos, ~] = MascaraDiscoPEAK(im);
+% Center es el centro del disco y Vasos es la máscara de los vasos
+[center, Vasos] = CentroVasos(im);
+
+% Erosiono con un ee vertical para deshacerme de las lineas horizontales
 ee = strel('line', 2, 90);
 Vasos = imerode(Vasos, ee);
 
+% Calculo el promedio
 [~, x] = find(Vasos == 1);
-
 x_mean = floor(mean(x));
-R_DH = abs(center(1,1) - x_mean);
 
-% figure(1)
-% subplot(1,2,1)
-% imshowpair(im, bw);
-% subplot(1,2,2)
-% imshowpair(bw, Vasos)
-% hold on
-% plot(x_mean, center(1,2), 'r*',center(1,1), center(1,2), 'b*');
-% hold off
-% pause(0.02)
+% Busco la discancia
+DH = abs(center(1,1) - x_mean);
+
 end

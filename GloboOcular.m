@@ -1,16 +1,15 @@
-%% Características del Globo Ocular
+%% GloboOcular
 % Inputs: imagen para binarizar (im)
 % Output: centro, radio y area del globo ocular
 
 function [centro, radio, area] = GloboOcular(im)
 
-N=3;
-img_gray = rgb2gray(im);            %Imagen a escala de grises
-th = multithresh(img_gray,N);       %Thresh con Otsu
+img_gray = rgb2gray(im);            % Imagen a escala de grises
+th = multithresh(img_gray,3);       % Thresh con Otsu
 
 % Binarización
 bw = zeros(size(img_gray));
-bw(img_gray > th(1))=1;
+bw(img_gray > th(1)) = 1;
 
 stats = regionprops(bw,'Centroid','MajorAxisLength','MinorAxisLength');
 

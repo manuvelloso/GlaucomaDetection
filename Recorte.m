@@ -1,25 +1,19 @@
-%% Recorte de las imágenes ajustándolas al tamaño del globo ocular
+%% Recorte
+% Recorta la imágen ajustandola al tamaño de la circunferencia grande (globo)
 % Input: imagen (im)
-% Output: imagen (I) recortada
-
-function I=Recorte(im)
-[centro, r, ~] = GloboOcular(im);           %Obtener centro y radio
-
-% Centro
+% Output: imagen recortada (im_new)
+function im_new = Recorte(im)
+[centro, r, ~] = GloboOcular(im);
 x0 = centro(1);
 y0 = centro(2);
-
-% Tamaño
 tam = floor((r+1));
 
-[h, w, ~] = size(im);                       %Dimensiones de la imagen
+[h, w, ~] = size(im);  % dimensiones de la imagen
 
-% Si me mantengo dentro del rango de pixeles
 if (x0 + tam) < w && (x0 - tam) > 0 && (y0 + tam) < h && (y0 - tam) > 0
-    I = im(y0 - tam:y0 + tam, x0 - tam:x0 + tam, :);
+    im_new = im(y0 - tam:y0 + tam, x0 - tam:x0 + tam, :);
 else
-% Sino, me quedo con la imagen que llega por parámetro
-    I = im;
+    im_new = im;
 end
 
 end

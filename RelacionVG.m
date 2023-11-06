@@ -1,17 +1,17 @@
-%% Relaci√≥n de Vasos sangu√≠neos con el Globo ocular
+%% RelacionVG
 % Inputs: imagen (im)    
-% Outputs: √°rea de los vasos del disco/√°rea del globo
+% Outputs: VG RelaciÛn del area de los vasos sanguÌneos con el area del globo ocular
 
-function A = RelacionVG(im)
-% Calcular centro, radio y √°rea del globo ocular
+function VG = RelacionVG(im)
+% Calcular ·rea del globo ocular
 [~, ~, AreaGlobo] = GloboOcular(im);
 
-% Generaci√≥n de la m√°scara que contenga unicamente a los vasos del disco
+% GeneraciÛn de la m·scara que contenga unicamente a los vasos del disco
 mask = SegmentacionVasos(im);
 
-% Calcular √°rea de los vasos encontrados
+% Calcular ·rea de los vasos encontrados
 AreaVasos = sum(mask(:));
 
-% √?rea de vasos en relaci√≥n con el √°rea del globo ocular
-A = AreaVasos/AreaGlobo;
+% ¡rea de vasos en relaciÛn con el ·rea del globo ocular
+VG = AreaVasos/ AreaGlobo;
 end

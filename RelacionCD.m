@@ -1,86 +1,32 @@
-function [CD] = RelacionCD(im)
+%% RelaciÛn de vasos sanguÌneos con el globo ocular
+% Inputs: imagen (im)    
+% Outputs: CD ¡rea de la copa/ ¡rea del disco
 
-% Componentes roja y verde
-% R = im(:,:,1); 
-% G = im(:,:,2); 
+function CD = RelacionCD(im) 
 
-% Ajuste de intensidad
-% G_i = imadjust(G); 
-% R_i = imadjust(R);
+% Obtencion del disco
+[D, center, radio] = MascaraDisco(im); 
 
-% Elemento estructurante tama√±o 15
-% EE = strel('disk',10);  
+% Obtencion del cup
+[C, ~, ~] = NormalizarBlue(im, 0.37);
 
-% Operaciones morfologicas -------
-% Cerradura
-% R = imclose(R_i,EE);        
-% G = imclose(G_i,EE);           
-
-% Aperura
-% R = imopen(R,EE);   
-% G = imopen(G,EE);
-% R = imadjust(R); 
-
-% Umbralizacion ------------------
-% R_bw = im2bw(R, 0.98); 
-% G_bw = im2bw(G, 0.999);
-
-% Elemento estructurante tama√±o 20
-% EE = strel('disk',20);  
-
-% Erosion
-% R_bw = imerode(R_bw,EE);
-% G_bw = imerode(G_bw,EE);
-
-% Dilatacion
-% R_bw = imdilate(R_bw,EE);
-
-%Elemento estructural tama√±o 10
-% EE = strel('disk',10); 
-% G_bw = imdilate(G_bw,EE);
-
-% A_disco = sum(R_bw(:));
-% A_copa = sum(G_bw(:));
-% CD = imdivide(A_copa,A_disco);
-
-% figure(1)
-% subplot(231),imshow(im),title(['Imagen normal',num2str(CD)])
-% subplot(232),imshow(R),title('Componente roja')
-% subplot(233),imshow(R_bw),title('Area del disco')
-% subplot(234),imshow(G),title('Componente verde')
-% subplot(235),imshow(G_bw),title('Cup Area')
-% pause(0.1)
-
-% if(sum(G_bw)==0) % se nos hizo cero el cup
-   %[CD,G_bw]=AjusteCup(G_i,G_bw,R_bw);
-% end
-% if(CD<0.06) %disk es muy grande
-    %CD=funcion(R_i,G_bw);
-%end
-
-G = im(:,:,2); 
-G_i = imadjust(G);
-
-Disk_bw = MascaraDisco(im);
-Cup_bw = MascaraCup(im);
-
-if(sum(Cup_bw)==0) % se nos hizo cero el cup
-   [CD,Cup_bw]=AjusteCup(G_i,Cup_bw,Disk_bw);
+% Si el ·rea del cup es pequeÒa, lo vuelvo a calcular pero con un A chico
+if (sum(C(:)) < 50)
+    [C, ~, ~] = NormalizarBlue(im, 0.18);
 end
 
-% Componente roja
-figure(1)
-subplot(121)
-imshowpair(Disk_bw,Cup_bw);
-subplot(122)
-imshow(im);
-pause(0.3);
+M = zeros(size(C));                             % Armo matriz de ceros
+M(round(center(1,2)),round(center(1,1))) = 1;   % 1 en centro del DISCO
+A = double(bwdist(M));                          % para calcular matriz de distancia
+M(A < radio) = 1;
+D = D&M;
+C = C&M;
 
-A_disco = sum(Disk_bw(:));
-A_copa = sum(Cup_bw(:));
+% C·lculo de ·reas
+Area_D = sum(D(:));
+Area_C = sum(C(:));
 
-
-%% Relacion copa al disco    
-CD = imdivide(A_copa,A_disco);
+% C·lculo de CD
+CD = imdivide(Area_C, Area_D);
 
 end

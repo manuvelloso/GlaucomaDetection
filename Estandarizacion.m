@@ -1,8 +1,8 @@
-%% Estandarización de Imágenes
-% Input: imagen (im)
-% Output: imagen (I) redimensionada
-
-function I = Estandarizacion(im)
-I = Recorte(im);
-I = imresize(I,[225 225]);
+%% Estandarización 
+% Input: imágen (im)
+% Output: Imagen estandarizada (im_new)
+function im_new = Estandarizacion(im)
+im_new = Recorte(im);
+im_new = imresize(im_new,[225 225]);
 end
+
