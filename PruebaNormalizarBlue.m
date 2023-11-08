@@ -2,27 +2,26 @@
 % Inputs : imagen (im), A valor para ajustar la im 
 % Outputs : BW máscara, D disco, center
 
-function [BW, D, center] = PruebaNormalizarBlue(im)
-BW = 0;
-D = 0;
-center = 0;
-B = im(:, :, 3);
+function C = PruebaNormalizarBlue(im)
 
-[D, center, ~] = MascaraDisco(im); %agarro el disco
+% Me quedo solo con el disco
+D = RecorteDisco(im);
 
-B = B.*uint8(D);
-B = imadjust(B, [0.1 1]);
+% Canal azul
+B = D(:, :, 3);
 
-H = imhist(B);
+B = histeq(B); % Ecualizo el histograma
 
-figure(1)
-subplot(121)
-imshow(B)
-subplot(122)
-bar(H);
-pause(0.5)
-% B_h = imadjust(B,[A 1]); % normalizo el hist para valores desde A a 1
-% B_h = B_h.*uint8(D); % ajusto y me quedo con la parte del disco
+th = multithresh(B, 2);
+B(B > th(2)) = 255;
+B(B <= th(2)) = 0;
 
-% BW = im2bw(B_h, 0.1);
+ee = strel('disk', 1);
+B = imerode(B, ee);
+B = imdilate(B, ee);
+B = imclose(B, ee);
+B = bwmorph(B, 'clean');
+
+C = B;
+
 end
