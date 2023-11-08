@@ -10,29 +10,30 @@ Ic(Ic<=thr) = thr;
 Ic = Ic - min(Ic(:));
 Ic = Ic ./ max(Ic(:));
 
-% Funci髇 de MathWorks
+% Funci贸n de MathWorks
 V2 = vesselness2D(Ic, 0.5:0.5:2.5, [1;1], 0.1, false);
 
 aux = V2;                   % Variable auxiliar
 V2(:,:,2)=0;                % Canal Green a cero
 V2(:,:,3)=0;                % Canal Blue a cero
 
-G = aux - V2;          % Eliminaci髇 de componente roja
+G = aux - V2;          % Eliminaci贸n de componente roja
 G(:,:,3)=0;            % Solo componente verde (los vasos)
 
-% Binarizaci髇
+% Binarizaci贸n
 th = multithresh(G,1);
 bw_G = im2bw(G,th);
 
-% Operaciones morfol骻icas
+% Operaciones morfol贸gicas
 bw_G = bwmorph(bw_G,'clean');
 bw_G = bwmorph(bw_G,'thin');
-bw_G = bwareaopen(bw_G,6);
 
-% Obtenci髇 de la m醩cara del disco 
-mask = MascaraDisco(im);
 
-% Vasos sangu韓eos del disco
+% Obtenci贸n de la m谩scara del disco 
+[D, center, radio] = MascaraDisco(im);
+mask = MascaraCircular(size(D),center, (radio-6));
+
+% Vasos sangu铆neos del disco
 Vasos = mask.*bw_G;
-
+Vasos = bwareaopen(Vasos,8);
 end
