@@ -1,5 +1,0 @@
-function C = MascaraCup(im)
-C = im(:,:,2); 
-
-C = im2bw(C, 0.75);
-end
