@@ -1,3 +1,4 @@
+En proceso de refactor
 # GlaucomaDetection 👁️💻
 Trabajo Final de Procesamiento Digital de Imágenes (PDI): Detección automática de Glaucomas en imágenes de Fondo de Ojos usando herramientas de ML.
 
