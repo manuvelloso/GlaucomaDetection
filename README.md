@@ -2,6 +2,8 @@
 
 Trabajo Final de Procesamiento Digital de Imágenes (PDI): Detección automática de Glaucomas en imágenes de Fondo de Ojos usando herramientas de ML.
 
+Base de datos generada en [kaggle](https://www.kaggle.com/datasets/mailenzino/fondo-de-ojo-glaucoma-normal)
+
 
 ### Estructura
 
