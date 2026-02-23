@@ -35,11 +35,11 @@ Funciones/
 │   ├── GenerarTabla.m
 │   └── PreSeleccion.m
 │
-└── Utilitarios/               Funciones auxiliares y externas
+├── Utilitarios/               Funciones auxiliares y externas
 │   └── vesselness2D.m
 │
 ├── Presentación.pdf           Diapositivas usadas para la presentación oral
-├── tabla.csv                  Tabla resultado de correr GenerarTabla()
+└── tabla.csv                  Tabla resultado de correr GenerarTabla()
 ```
 
 ## Flujo de procesamiento
